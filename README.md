@@ -8,3 +8,9 @@ Just include the Javascript file into your project and make `L` available in the
     import './leaflet-v1-polyfill.js';
 ```
 
+## Excluded from the Polyfill
+
+- https://github.com/Leaflet/Leaflet/pull/8603
+- https://github.com/Leaflet/Leaflet/pull/8612
+- https://github.com/Leaflet/Leaflet/pull/8734
+- https://github.com/Leaflet/Leaflet/pull/8196

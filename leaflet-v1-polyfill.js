@@ -3,9 +3,31 @@ L.Browser.canvas = (function () {
 	return !!document.createElement('canvas').getContext;
 }());
 
+function userAgentContains(str) {
+	return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
+}
+
 const style = document.documentElement.style;
+L.Browser.ie = 'ActiveXObject' in window;
+L.Browser.ielt9 = L.Browser.ie && !document.addEventListener;
+L.Browser.edge = 'msLaunchUri' in navigator && !('documentMode' in document);
+L.Browser.webkit = userAgentContains('webkit');
+L.Browser.android = userAgentContains('android');
+L.Browser.android23 = userAgentContains('android 2') || userAgentContains('android 3');
+L.Browser.webkitVer = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10); // also matches AppleWebKit
+L.Browser.androidStock = L.Browser.android && userAgentContains('Google') && L.Browser.webkitVer < 537 && !('AudioNode' in window);
+L.Browser.opera = !!window.opera;
+L.Browser.chrome = !L.Browser.edge && L.Browser.chrome;
+L.Browser.gecko = userAgentContains('gecko') && !L.Browser.webkit && !L.Browser.opera && !L.Browser.ie;
+
+L.Browser.phantom = userAgentContains('phantom');
+L.Browser.opera12 = 'OTransition' in style;
+L.Browser.win = navigator.platform.indexOf('Win') === 0;
+L.Browser.ie3d = L.Browser.ie && ('transition' in style);
+
 L.Browser.webkit3d = ('WebKitCSSMatrix' in window) && ('m11' in new window.WebKitCSSMatrix());
 L.Browser.gecko3d = 'MozPerspective' in style;
+L.Browser.mobileWebkit = L.Browser.mobile && L.Browser.webkit;
 L.Browser.mobileWebkit3d = L.Browser.mobile && L.Browser.webkit3d;
 
 L.Browser.svg = !!(document.createElementNS && L.SVG.create('svg').createSVGRect);
@@ -17,6 +39,36 @@ L.Browser.inlineSvg = !!L.Browser.svg && (function () {
 
 L.Browser.any3d = !window.L_DISABLE_3D && (L.Browser.webkit3d || L.Browser.gecko3d);
 L.Browser.vml = false;
+
+L.Browser.msPointer = !window.PointerEvent && window.MSPointerEvent;
+L.Browser.pointer = L.Browser.pointer || L.Browser.msPointer;
+
+L.Browser.touch = !window.L_NO_TOUCH && L.Browser.touch;
+
+L.Browser.mobileOpera = L.Browser.mobile && L.Browser.opera;
+L.Browser.mobileGecko = L.Browser.mobile && L.Browser.gecko;
+
+L.Browser.passiveEvents = (function () {
+	var supportsPassiveOption = false;
+	try {
+		var opts = Object.defineProperty({}, 'passive', {
+			get: function () { // eslint-disable-line getter-return
+				supportsPassiveOption = true;
+			}
+		});
+		window.addEventListener('testPassiveEventSupport', Util.falseFn, opts);
+		window.removeEventListener('testPassiveEventSupport', Util.falseFn, opts);
+	} catch (e) {
+		// Errors can safely be ignored since this is only a browser support test.
+	}
+	return supportsPassiveOption;
+}());
+
+L.Browser.canvas = (function () {
+	return !!document.createElement('canvas').getContext;
+}());
+
+
 
 const setPosCore = L.DomUtil.setPosition;
 L.DomUtil.setPosition = function (el, point) {
@@ -73,6 +125,15 @@ L.DomUtil.TRANSITION = L.DomUtil.testProp(['webkitTransition', 'transition', 'OT
 L.DomUtil.TRANSITION_END = L.DomUtil.TRANSITION === 'webkitTransition' || L.DomUtil.TRANSITION === 'OTransition' ? `${L.DomUtil.TRANSITION}End` : 'transitionend';
 
 L.DomUtil.TRANSFORM = L.DomUtil.testProp(['transform', 'webkitTransform', 'OTransform', 'MozTransform', 'msTransform']);
+L.DomUtil.setTransform = function(el, offset, scale) {
+	var pos = offset || new Point(0, 0);
+
+	el.style[L.DomUtil.TRANSFORM] =
+		(Browser.ie3d ?
+			'translate(' + pos.x + 'px,' + pos.y + 'px)' :
+			'translate3d(' + pos.x + 'px,' + pos.y + 'px,0)') +
+		(scale ? ' scale(' + scale + ')' : '');
+}
 
 L.DomUtil.removeClass = (el, name) => el.classList.remove(name);
 
@@ -119,6 +180,26 @@ L.DomUtil.setClass = (el, name) => { el.classList.value = name; };
 L.DomUtil.getClass = el => el.classList.value;
 L.DomUtil.hasClass = (el, name) => el.classList.contains(name);
 
+if (!('onselectstart' in document)) {
+	var userSelectProperty = L.DomUtil.testProp(
+		['userSelect', 'WebkitUserSelect', 'OUserSelect', 'MozUserSelect', 'msUserSelect']);
+
+	L.DomUtil.disableTextSelection = function () {
+		if (userSelectProperty) {
+			var style = document.documentElement.style;
+			_userSelect = style[userSelectProperty];
+			style[userSelectProperty] = 'none';
+		}
+	};
+	L.DomUtil.enableTextSelection = function () {
+		if (userSelectProperty) {
+			document.documentElement.style[userSelectProperty] = _userSelect;
+			_userSelect = undefined;
+		}
+	};
+}
+
+
 L.Util.trim = function (str) {
 	return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
 };
@@ -148,6 +229,39 @@ L.Util.bind = function (fn, obj) {
 		return fn.apply(obj, args.length ? args.concat(slice.call(arguments)) : arguments);
 	};
 };
+
+L.Util.getParamString = function (obj, existingUrl, uppercase) {
+	const params = [];
+	for (const i in obj) {
+		if (Object.hasOwn(obj, i)) {
+			params.push(`${encodeURIComponent(uppercase ? i.toUpperCase() : i)}=${encodeURIComponent(obj[i])}`);
+		}
+	}
+	return ((!existingUrl || !existingUrl.includes('?')) ? '?' : '&') + params.join('&');
+}
+
+
+
+const requestFn = typeof window === 'undefined' ? L.Util.falseFn : window.requestAnimationFrame;
+const cancelFn = typeof window === 'undefined' ? L.Util.falseFn : window.cancelAnimationFrame;
+L.Util.requestAnimFrame = function (fn, context) {
+	return requestFn.call(window, fn.bind(context));
+}
+L.Util.cancelAnimFrame = function (id) {
+	cancelFn.call(window, id);
+}
+
+L.Util.extend = function(dest) {
+	var i, j, len, src;
+
+	for (j = 1, len = arguments.length; j < len; j++) {
+		src = arguments[j];
+		for (i in src) {
+			dest[i] = src[i];
+		}
+	}
+	return dest;
+}
 
 L.DomEvent.getMousePosition = L.DomEvent.getPointerPosition;
 
@@ -188,3 +302,81 @@ L.DomEvent.disableClickPropagation = function disableClickPropagation(el) {
 	L.DomEvent.on(el, 'mousedown touchstart', L.DomEvent.stopPropagation);
 	return _super_disableClickPropagation(el);
 }
+
+L.DomEvent.getPropagationPath = function(ev) {
+	if (ev.composedPath) {
+		return ev.composedPath();
+	}
+
+	const path = [];
+	let el = ev.target;
+
+	while (el) {
+		path.push(el);
+		el = el.parentNode;
+	}
+	return path;
+}
+
+L.DomEvent.getWheelDelta = function(e) {
+	return (e.deltaY && e.deltaMode === 0) ? -e.deltaY / getWheelPxFactor() : // Pixels
+		(e.deltaY && e.deltaMode === 1) ? -e.deltaY * 20 : // Lines
+		(e.deltaY && e.deltaMode === 2) ? -e.deltaY * 60 : // Pages
+		(e.deltaX || e.deltaZ) ? 0 :	// Skip horizontal/depth wheel events
+		e.wheelDelta ? (e.wheelDeltaY || e.wheelDelta) / 2 : // Legacy IE pixels
+		(e.detail && Math.abs(e.detail) < 32765) ? -e.detail * 20 : // Legacy Moz lines
+		e.detail ? e.detail / -32765 * 60 : // Legacy Moz pages
+		0;
+}
+
+const _super_initLayout = L.Control.Layers.prototype._initLayout;
+L.Control.Layers.include({
+	_initLayout() {
+		_super_initLayout.call(this);
+
+		this._container.setAttribute('aria-haspopup', true);
+	}
+});
+
+L.Evented.include({
+	_propagateEvent(e) {
+		for (const p of Object.values(this._eventParents ?? {})) {
+			p.fire(e.type, {
+				layer: e.target,
+				propagatedFrom: e.target,
+				...e
+			}, true);
+		}
+	}
+});
+
+const _super_getIconUrl = L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.include({
+	_getIconUrl: function (name) {
+		if (typeof L.Icon.Default.imagePath !== 'string') {	// Deprecated, backwards-compatibility only
+			L.Icon.Default.imagePath = this._detectIconPath();
+		}
+		return _super_getIconUrl.call(this, name);
+	},
+})
+
+const _super_initializeCircle = L.Control.Layers.prototype.initialize;
+L.Circle.include({
+	initialize: function (latlng, options, legacyOptions) {
+		if (typeof options === 'number') {
+			// Backwards compatibility with 0.7.x factory (latlng, radius, options?)
+			options = L.Util.extend({}, legacyOptions, {radius: options});
+		}
+		_super_initializeCircle.call(this, latlng, options);
+	}
+});
+
+const ccsStyle = document.createElement('style');
+ccsStyle.textContent = `
+  .leaflet-tile {
+    filter: inherit;
+  }
+`;
+document.head.appendChild(ccsStyle);
+
+
