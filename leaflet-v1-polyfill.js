@@ -263,6 +263,12 @@ L.Util.extend = function(dest) {
 	return dest;
 }
 
+L.extend = L.Util.extend;
+L.bind = L.Util.bind;
+L.stamp = L.Util.stamp;
+L.setOptions = L.Util.setOptions;
+
+
 L.DomEvent.getMousePosition = L.DomEvent.getPointerPosition;
 
 const _super_findEventTargets = L.Map.prototype._findEventTargets;

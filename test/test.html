@@ -20,11 +20,11 @@
         window.L = L;
         import '../leaflet-v1-polyfill.js';
 
-        new L.map('map', {
+        new L.Map('map', {
             center: [51.505, -0.09],
             zoom: 13,
             layers: [
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '© OpenStreetMap'
                 })
