@@ -1,98 +1,7 @@
 /* @preserve
- * Leaflet 1.9.2+main.672fa6e, a JS library for interactive maps. https://leafletjs.com
+ * Leaflet 1.9.4+main.f4eeb7f, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2025 Volodymyr Agafonkin, (c) 2010-2011 CloudMade
  */
-
-var name = "leaflet";
-var version$1 = "1.9.2+main.672fa6e3";
-var homepage = "https://leafletjs.com/";
-var description = "JavaScript library for mobile-friendly interactive maps";
-var devDependencies = {
-	"@mapbox/eslint-plugin-script-tags": "^1.0.0",
-	"@rollup/plugin-json": "^6.1.0",
-	bundlemon: "^3.0.3",
-	chai: "^5.1.1",
-	eslint: "^9.23.0",
-	"eslint-config-mourner": "^4.0.2",
-	"eslint-plugin-import-x": "^4.9.1",
-	"http-server": "^14.1.1",
-	husky: "^9.1.4",
-	karma: "^6.4.3",
-	"karma-chrome-launcher": "^3.2.0",
-	"karma-coverage": "^2.2.1",
-	"karma-firefox-launcher": "^2.1.3",
-	"karma-mocha": "^2.0.1",
-	"karma-safarinative-launcher": "^1.1.0",
-	"karma-time-stats-reporter": "^0.1.0",
-	leafdoc: "^2.3.0",
-	"lint-staged": "^15.2.7",
-	mocha: "^10.7.0",
-	"prosthetic-hand": "^2.0.0",
-	rollup: "^4.19.1",
-	"rollup-plugin-git-version": "^0.3.1",
-	"simple-git": "^3.25.0",
-	sinon: "^18.0.0",
-	ssri: "^10.0.6",
-	"uglify-js": "^3.19.1",
-	"ui-event-simulator": "^2.0.0"
-};
-var type = "module";
-var exports = {
-	"./src/": "./src/",
-	"./dist/": "./dist/",
-	".": "./dist/leaflet-src.js"
-};
-var style = "dist/leaflet.css";
-var files = [
-	"dist",
-	"src",
-	"!dist/leaflet.zip",
-	"!*.leafdoc",
-	"CHANGELOG.md"
-];
-var scripts = {
-	debug: "http-server -c-1",
-	docs: "node ./build/docs.js && node ./build/integrity.js",
-	test: "karma start ./spec/karma.conf.cjs",
-	coverage: "karma start ./spec/karma.conf.cjs --coverage --single-run",
-	build: "npm run rollup && npm run uglify && npm run uglify-global",
-	lint: "eslint .",
-	lintfix: "npm run lint -- --fix",
-	rollup: "rollup -c build/rollup-config.js",
-	watch: "rollup -w -c build/rollup-config.js",
-	uglify: "uglifyjs dist/leaflet-src.js -c -m -o dist/leaflet.js --source-map filename=dist/leaflet.js.map --source-map content=dist/leaflet-src.js.map --source-map url=leaflet.js.map --comments",
-	"uglify-global": "uglifyjs dist/leaflet-global-src.js -c -m -o dist/leaflet-global.js --source-map filename=dist/leaflet-global.js.map --source-map content=dist/leaflet-global-src.js.map --source-map url=leaflet-global.js.map --comments",
-	bundlemon: "bundlemon --subProject js --defaultCompression none && bundlemon --subProject js-gzip --defaultCompression gzip",
-	serve: "cd docs && bundle exec jekyll serve",
-	prepare: "husky"
-};
-var repository = {
-	type: "git",
-	url: "git://github.com/Leaflet/Leaflet.git"
-};
-var keywords = [
-	"gis",
-	"map"
-];
-var license = "BSD-2-Clause";
-var pkg = {
-	name: name,
-	version: version$1,
-	homepage: homepage,
-	description: description,
-	devDependencies: devDependencies,
-	type: type,
-	exports: exports,
-	style: style,
-	files: files,
-	scripts: scripts,
-	repository: repository,
-	keywords: keywords,
-	license: license,
-	"lint-staged": {
-	"*.(js|mjs|md)": "eslint --cache --fix"
-}
-};
 
 /*
  * @namespace Util
@@ -221,17 +130,17 @@ function template(str, data) {
 const emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
 var Util = {
-  __proto__: null,
-  emptyImageUrl: emptyImageUrl,
-  falseFn: falseFn,
-  formatNum: formatNum,
-  get lastId () { return lastId; },
-  setOptions: setOptions,
-  splitWords: splitWords,
-  stamp: stamp,
-  template: template,
-  throttle: throttle,
-  wrapNum: wrapNum
+	__proto__: null,
+	emptyImageUrl: emptyImageUrl,
+	falseFn: falseFn,
+	formatNum: formatNum,
+	get lastId () { return lastId; },
+	setOptions: setOptions,
+	splitWords: splitWords,
+	stamp: stamp,
+	template: template,
+	throttle: throttle,
+	wrapNum: wrapNum
 };
 
 // @class Class
@@ -2165,22 +2074,22 @@ function getScale(element) {
 }
 
 var DomUtil = {
-  __proto__: null,
-  create: create$1,
-  disableImageDrag: disableImageDrag,
-  disableTextSelection: disableTextSelection,
-  enableImageDrag: enableImageDrag,
-  enableTextSelection: enableTextSelection,
-  get: get,
-  getPosition: getPosition,
-  getScale: getScale,
-  getSizedParentNode: getSizedParentNode,
-  preventOutline: preventOutline,
-  restoreOutline: restoreOutline,
-  setPosition: setPosition,
-  setTransform: setTransform,
-  toBack: toBack,
-  toFront: toFront
+	__proto__: null,
+	create: create$1,
+	disableImageDrag: disableImageDrag,
+	disableTextSelection: disableTextSelection,
+	enableImageDrag: enableImageDrag,
+	enableTextSelection: enableTextSelection,
+	get: get,
+	getPosition: getPosition,
+	getScale: getScale,
+	getSizedParentNode: getSizedParentNode,
+	preventOutline: preventOutline,
+	restoreOutline: restoreOutline,
+	setPosition: setPosition,
+	setTransform: setTransform,
+	toBack: toBack,
+	toFront: toFront
 };
 
 /*
@@ -2244,11 +2153,11 @@ function cleanupPointers() {
 }
 
 var DomEvent_PointerEvents = {
-  __proto__: null,
-  cleanupPointers: cleanupPointers,
-  disablePointerDetection: disablePointerDetection,
-  enablePointerDetection: enablePointerDetection,
-  getPointers: getPointers
+	__proto__: null,
+	cleanupPointers: cleanupPointers,
+	disablePointerDetection: disablePointerDetection,
+	enablePointerDetection: enablePointerDetection,
+	getPointers: getPointers
 };
 
 /*
@@ -2525,22 +2434,22 @@ function isExternalTarget(el, e) {
 }
 
 var DomEvent = {
-  __proto__: null,
-  PointerEvents: DomEvent_PointerEvents,
-  addListener: on,
-  disableClickPropagation: disableClickPropagation,
-  disableScrollPropagation: disableScrollPropagation,
-  getPointerPosition: getPointerPosition,
-  getPropagationPath: getPropagationPath,
-  getWheelDelta: getWheelDelta,
-  getWheelPxFactor: getWheelPxFactor,
-  isExternalTarget: isExternalTarget,
-  off: off,
-  on: on,
-  preventDefault: preventDefault,
-  removeListener: off,
-  stop: stop,
-  stopPropagation: stopPropagation
+	__proto__: null,
+	PointerEvents: DomEvent_PointerEvents,
+	addListener: on,
+	disableClickPropagation: disableClickPropagation,
+	disableScrollPropagation: disableScrollPropagation,
+	getPointerPosition: getPointerPosition,
+	getPropagationPath: getPropagationPath,
+	getWheelDelta: getWheelDelta,
+	getWheelPxFactor: getWheelPxFactor,
+	isExternalTarget: isExternalTarget,
+	off: off,
+	on: on,
+	preventDefault: preventDefault,
+	removeListener: off,
+	stop: stop,
+	stopPropagation: stopPropagation
 };
 
 /*
@@ -5828,10 +5737,10 @@ function centroid(coords) {
 }
 
 var PolyUtil = {
-  __proto__: null,
-  centroid: centroid,
-  clipPolygon: clipPolygon,
-  polygonCenter: polygonCenter
+	__proto__: null,
+	centroid: centroid,
+	clipPolygon: clipPolygon,
+	polygonCenter: polygonCenter
 };
 
 /*
@@ -6131,16 +6040,16 @@ function polylineCenter(latlngs, crs) {
 }
 
 var LineUtil = {
-  __proto__: null,
-  _getBitCode: _getBitCode,
-  _getEdgeIntersection: _getEdgeIntersection,
-  _sqClosestPointOnSegment: _sqClosestPointOnSegment,
-  clipSegment: clipSegment,
-  closestPointOnSegment: closestPointOnSegment,
-  isFlat: isFlat,
-  pointToSegmentDistance: pointToSegmentDistance,
-  polylineCenter: polylineCenter,
-  simplify: simplify
+	__proto__: null,
+	_getBitCode: _getBitCode,
+	_getEdgeIntersection: _getEdgeIntersection,
+	_sqClosestPointOnSegment: _sqClosestPointOnSegment,
+	clipSegment: clipSegment,
+	closestPointOnSegment: closestPointOnSegment,
+	isFlat: isFlat,
+	pointToSegmentDistance: pointToSegmentDistance,
+	polylineCenter: polylineCenter,
+	simplify: simplify
 };
 
 /*
@@ -6238,10 +6147,10 @@ const Mercator = {
  */
 
 var index = {
-  __proto__: null,
-  LonLat: LonLat,
-  Mercator: Mercator,
-  SphericalMercator: SphericalMercator
+	__proto__: null,
+	LonLat: LonLat,
+	Mercator: Mercator,
+	SphericalMercator: SphericalMercator
 };
 
 /*
@@ -13937,86 +13846,87 @@ Map$1.TapHold = TapHold;
 Map$1.PinchZoom = PinchZoom;
 Map$1.TouchZoom = PinchZoom; // backward compatibility
 
-const version = pkg.version;
+// !!! NEXT LINE IS AUTO-GENERATED VIA `NPM VERSION` !!!
+const version = '1.9.4';
 
 var L = {
-  __proto__: null,
-  BlanketOverlay: BlanketOverlay,
-  Bounds: Bounds,
-  Browser: Browser,
-  CRS: CRS,
-  Canvas: Canvas,
-  Circle: Circle,
-  CircleMarker: CircleMarker,
-  Class: Class,
-  Control: Control,
-  DivIcon: DivIcon,
-  DivOverlay: DivOverlay,
-  DomEvent: DomEvent,
-  DomUtil: DomUtil,
-  Draggable: Draggable,
-  Evented: Evented,
-  FeatureGroup: FeatureGroup,
-  GeoJSON: GeoJSON,
-  GridLayer: GridLayer,
-  Handler: Handler,
-  Icon: Icon,
-  ImageOverlay: ImageOverlay,
-  LatLng: LatLng,
-  LatLngBounds: LatLngBounds,
-  Layer: Layer,
-  LayerGroup: LayerGroup,
-  LineUtil: LineUtil,
-  Map: Map$1,
-  Marker: Marker,
-  Path: Path,
-  Point: Point,
-  PolyUtil: PolyUtil,
-  Polygon: Polygon,
-  Polyline: Polyline,
-  Popup: Popup,
-  PosAnimation: PosAnimation,
-  Projection: index,
-  Rectangle: Rectangle,
-  Renderer: Renderer,
-  SVG: SVG,
-  SVGOverlay: SVGOverlay,
-  TileLayer: TileLayer,
-  Tooltip: Tooltip,
-  Transformation: Transformation,
-  Util: Util,
-  VideoOverlay: VideoOverlay,
-  bounds: toBounds,
-  canvas: canvas,
-  circle: circle,
-  circleMarker: circleMarker,
-  control: control,
-  divIcon: divIcon,
-  featureGroup: featureGroup,
-  geoJSON: geoJSON,
-  geoJson: geoJson,
-  gridLayer: gridLayer,
-  icon: icon,
-  imageOverlay: imageOverlay,
-  latLng: toLatLng,
-  latLngBounds: toLatLngBounds,
-  layerGroup: layerGroup,
-  map: createMap,
-  marker: marker,
-  point: toPoint,
-  polygon: polygon,
-  polyline: polyline,
-  popup: popup,
-  rectangle: rectangle,
-  setOptions: setOptions,
-  stamp: stamp,
-  svg: svg,
-  svgOverlay: svgOverlay,
-  tileLayer: tileLayer,
-  tooltip: tooltip,
-  transformation: toTransformation,
-  version: version,
-  videoOverlay: videoOverlay
+	__proto__: null,
+	BlanketOverlay: BlanketOverlay,
+	Bounds: Bounds,
+	Browser: Browser,
+	CRS: CRS,
+	Canvas: Canvas,
+	Circle: Circle,
+	CircleMarker: CircleMarker,
+	Class: Class,
+	Control: Control,
+	DivIcon: DivIcon,
+	DivOverlay: DivOverlay,
+	DomEvent: DomEvent,
+	DomUtil: DomUtil,
+	Draggable: Draggable,
+	Evented: Evented,
+	FeatureGroup: FeatureGroup,
+	GeoJSON: GeoJSON,
+	GridLayer: GridLayer,
+	Handler: Handler,
+	Icon: Icon,
+	ImageOverlay: ImageOverlay,
+	LatLng: LatLng,
+	LatLngBounds: LatLngBounds,
+	Layer: Layer,
+	LayerGroup: LayerGroup,
+	LineUtil: LineUtil,
+	Map: Map$1,
+	Marker: Marker,
+	Path: Path,
+	Point: Point,
+	PolyUtil: PolyUtil,
+	Polygon: Polygon,
+	Polyline: Polyline,
+	Popup: Popup,
+	PosAnimation: PosAnimation,
+	Projection: index,
+	Rectangle: Rectangle,
+	Renderer: Renderer,
+	SVG: SVG,
+	SVGOverlay: SVGOverlay,
+	TileLayer: TileLayer,
+	Tooltip: Tooltip,
+	Transformation: Transformation,
+	Util: Util,
+	VideoOverlay: VideoOverlay,
+	bounds: toBounds,
+	canvas: canvas,
+	circle: circle,
+	circleMarker: circleMarker,
+	control: control,
+	divIcon: divIcon,
+	featureGroup: featureGroup,
+	geoJSON: geoJSON,
+	geoJson: geoJson,
+	gridLayer: gridLayer,
+	icon: icon,
+	imageOverlay: imageOverlay,
+	latLng: toLatLng,
+	latLngBounds: toLatLngBounds,
+	layerGroup: layerGroup,
+	map: createMap,
+	marker: marker,
+	point: toPoint,
+	polygon: polygon,
+	polyline: polyline,
+	popup: popup,
+	rectangle: rectangle,
+	setOptions: setOptions,
+	stamp: stamp,
+	svg: svg,
+	svgOverlay: svgOverlay,
+	tileLayer: tileLayer,
+	tooltip: tooltip,
+	transformation: toTransformation,
+	version: version,
+	videoOverlay: videoOverlay
 };
 
 const oldL = getGlobalObject().L;

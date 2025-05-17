@@ -4,22 +4,12 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link type="text/css" rel="stylesheet" href="./leaflet.css" />
-    <script type="importmap">
-		{
-			"imports": {
-				"leaflet": "./leaflet-src.js"
-			}
-		}
-	</script>
 </head>
 <body>
     <div id="map" style="width: 100%; height: 100vh;"></div>
-    <script type="module">
-
-        import L from 'leaflet';
-        window.L = L;
-        import '../leaflet-v1-polyfill.js';
-
+    <script src="./leaflet-global-src.js"></script>
+    <script src="../leaflet-v1-polyfill.js"></script>
+    <script>
         applyAllPolyfills();
 
         L.extend({}, {})
