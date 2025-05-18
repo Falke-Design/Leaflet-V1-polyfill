@@ -6,6 +6,7 @@ function applyAllPolyfills (){
 	applyDomEventPolyfill();
 	applyDeprecatedMethodsPolyfill();
 	applyFactoryMethodsPolyfill();
+	applyMiscPolyfill();
 };
 
 function applyMinimumPolyfills() {
@@ -72,16 +73,12 @@ function applyBrowserPolyfill() {
 					supportsPassiveOption = true;
 				}
 			});
-			window.addEventListener('testPassiveEventSupport', Util.falseFn, opts);
-			window.removeEventListener('testPassiveEventSupport', Util.falseFn, opts);
+			window.addEventListener('testPassiveEventSupport', L.Util.falseFn, opts);
+			window.removeEventListener('testPassiveEventSupport', L.Util.falseFn, opts);
 		} catch (e) {
 			// Errors can safely be ignored since this is only a browser support test.
 		}
 		return supportsPassiveOption;
-	}());
-
-	L.Browser.canvas = (function () {
-		return !!document.createElement('canvas').getContext;
 	}());
 };
 
@@ -400,16 +397,28 @@ function applyDeprecatedMethodsPolyfill() {
 		}
 	});
 
-	const ccsStyle = document.createElement('style');
-	ccsStyle.textContent = `
-	.leaflet-tile {
-		filter: inherit;
-	}
-	`;
-	document.head.appendChild(ccsStyle);
+	function exportPrototypeMethods(klass) {
+		const proto = klass.prototype;
+		const methodNames = Object.getOwnPropertyNames(proto)
+			.filter(name => name !== 'constructor' && typeof proto[name] === 'function');
+
+		return Object.fromEntries(
+			methodNames.map(name => [name, proto[name].bind(proto)])
+		);
+	};
+
+	L.Mixin = {
+		Events: exportPrototypeMethods(L.Evented)
+	};
+
+	L.LineUtil._flat = function (latlngs) {
+		console.warn('Deprecated use of _flat, please use L.LineUtil.isFlat instead.');
+		return L.LineUtil.isFlat(latlngs);
+	};
+
+	L.Polyline._flat = L.LineUtil._flat;
 };
 
-// Factory Methods
 function applyFactoryMethodsPolyfill() {
 	L.control = function (options) {
 		return new L.Control(options);
@@ -512,6 +521,16 @@ function applyFactoryMethodsPolyfill() {
 	};
 };
 
+function applyMiscPolyfill() {
+	const ccsStyle = document.createElement('style');
+	ccsStyle.textContent = `
+	.leaflet-tile {
+		filter: inherit;
+	}
+	`;
+	document.head.appendChild(ccsStyle);
+}
+
 globalThis.applyAllPolyfills = applyAllPolyfills;
 globalThis.applyMinimumPolyfills = applyMinimumPolyfills;
 globalThis.applyBrowserPolyfill = applyBrowserPolyfill;
@@ -521,3 +540,4 @@ globalThis.applyMouseEventPolyfill = applyMouseEventPolyfill;
 globalThis.applyDomEventPolyfill = applyDomEventPolyfill;
 globalThis.applyDeprecatedMethodsPolyfill = applyDeprecatedMethodsPolyfill;
 globalThis.applyFactoryMethodsPolyfill = applyFactoryMethodsPolyfill;
+globalThis.applyMiscPolyfill = applyMiscPolyfill;

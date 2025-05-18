@@ -39,6 +39,7 @@ Polyfills:
 - `applyDomEventPolyfill()`
 - `applyDeprecatedMethodsPolyfill()`
 - `applyFactoryMethodsPolyfill()`
+- `applyMiscPolyfill()`
 
 
 
@@ -46,5 +47,5 @@ Polyfills:
 
 - https://github.com/Leaflet/Leaflet/pull/8603
 - https://github.com/Leaflet/Leaflet/pull/8612
-- https://github.com/Leaflet/Leaflet/pull/8734
+- Partially https://github.com/Leaflet/Leaflet/pull/8734
 - https://github.com/Leaflet/Leaflet/pull/8196
