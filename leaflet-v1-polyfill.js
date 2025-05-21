@@ -391,7 +391,8 @@ function applyDeprecatedMethodsPolyfill() {
 		initialize: function (latlng, options, legacyOptions) {
 			if (typeof options === 'number') {
 				// Backwards compatibility with 0.7.x factory (latlng, radius, options?)
-				options = L.Util.extend({}, legacyOptions, {radius: options});
+				options ??= {};
+				Object.assign(options, legacyOptions, {radius: options});
 			}
 			_super_initializeCircle.call(this, latlng, options);
 		}
