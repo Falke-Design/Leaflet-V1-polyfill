@@ -352,6 +352,9 @@ function applyDomEventPolyfill() {
 			e.detail ? e.detail / -32765 * 60 : // Legacy Moz pages
 			0;
 	}
+	
+	L.DomEvent.addListener = L.DomEvent.on;
+	L.DomEvent.removeListener = L.DomEvent.off;
 };
 
 function applyDeprecatedMethodsPolyfill() {
@@ -373,6 +376,24 @@ function applyDeprecatedMethodsPolyfill() {
 					...e
 				}, true);
 			}
+		},
+		addEventListener() {
+			return this.on.apply(this, arguments);
+		},
+		removeEventListener() {
+			return this.off.apply(this, arguments);
+		},
+		clearAllEventListeners() {
+			return this.off.apply(this, arguments);
+		},
+		addOneTimeEventListener() {
+			return this.once.apply(this, arguments);
+		},
+		fireEvent() {
+			return this.fire.apply(this, arguments);
+		},
+		hasEventListeners() {
+			return this.listens.apply(this, arguments);
 		}
 	});
 
