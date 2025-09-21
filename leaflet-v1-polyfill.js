@@ -407,13 +407,14 @@ function applyDeprecatedMethodsPolyfill() {
 		},
 	})
 
-	const _super_initializeCircle = L.Control.Layers.prototype.initialize;
+	const _super_initializeCircle = L.Circle.prototype.initialize;
 	L.Circle.include({
 		initialize: function (latlng, options, legacyOptions) {
 			if (typeof options === 'number') {
 				// Backwards compatibility with 0.7.x factory (latlng, radius, options?)
-				options ??= {};
-				Object.assign(options, legacyOptions, {radius: options});
+				const radius = options;
+				options = {};
+				Object.assign(options, legacyOptions, {radius});
 			}
 			_super_initializeCircle.call(this, latlng, options);
 		}
