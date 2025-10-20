@@ -324,6 +324,9 @@ function applyMouseEventPolyfill() {
 		L.DomEvent.on(el, 'mousedown touchstart', L.DomEvent.stopPropagation);
 		return _super_disableClickPropagation(el);
 	}
+
+	// disable deprecated mouse event warnings
+	L.Evented.__REMOVED_EVENTS = [];
 };
 
 function applyDomEventPolyfill() {
