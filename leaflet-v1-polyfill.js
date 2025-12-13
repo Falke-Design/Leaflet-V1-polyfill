@@ -346,7 +346,7 @@ function applyDomEventPolyfill() {
 	}
 
 	L.DomEvent.getWheelDelta = function(e) {
-		return (e.deltaY && e.deltaMode === 0) ? -e.deltaY / getWheelPxFactor() : // Pixels
+		return (e.deltaY && e.deltaMode === 0) ? -e.deltaY / L.DomEvent.getWheelPxFactor() : // Pixels
 			(e.deltaY && e.deltaMode === 1) ? -e.deltaY * 20 : // Lines
 			(e.deltaY && e.deltaMode === 2) ? -e.deltaY * 60 : // Pages
 			(e.deltaX || e.deltaZ) ? 0 :	// Skip horizontal/depth wheel events
