@@ -7,6 +7,7 @@ function applyAllPolyfills (){
 	applyDeprecatedMethodsPolyfill();
 	applyFactoryMethodsPolyfill();
 	applyMiscPolyfill();
+	applyClassPolyfill();
 };
 
 function applyMinimumPolyfills() {
@@ -557,6 +558,44 @@ function applyMiscPolyfill() {
 	document.head.appendChild(ccsStyle);
 }
 
+function applyClassPolyfill() {
+	L.Class.extend = function ({statics, includes, ...props}) {
+		const NewClass = class extends this {};
+
+		// inherit parent's static properties
+		Object.setPrototypeOf(NewClass, this);
+
+		const parentProto = this.prototype;
+		const proto = NewClass.prototype;
+
+		// mix static properties into the class
+		if (statics) {
+			Object.assign(NewClass, statics);
+		}
+
+		// mix includes into the prototype
+		if (Array.isArray(includes)) {
+			for (const include of includes) {
+				NewClass.include(include);
+			}
+		} else if (includes) {
+			NewClass.include(includes);
+		}
+
+		// mix given properties into the prototype
+		Object.assign(proto, props);
+
+		// merge options
+		if (proto.options) {
+			proto.options = parentProto.options ? Object.create(parentProto.options) : {};
+			Object.assign(proto.options, props.options);
+		}
+
+		return NewClass;
+	}
+}
+
+
 globalThis.applyAllPolyfills = applyAllPolyfills;
 globalThis.applyMinimumPolyfills = applyMinimumPolyfills;
 globalThis.applyBrowserPolyfill = applyBrowserPolyfill;
@@ -567,3 +606,4 @@ globalThis.applyDomEventPolyfill = applyDomEventPolyfill;
 globalThis.applyDeprecatedMethodsPolyfill = applyDeprecatedMethodsPolyfill;
 globalThis.applyFactoryMethodsPolyfill = applyFactoryMethodsPolyfill;
 globalThis.applyMiscPolyfill = applyMiscPolyfill;
+globalThis.applyClassPolyfill = applyClassPolyfill;
